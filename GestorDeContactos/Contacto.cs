@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace GestorDeContactos
 {
-    internal class Contacto
+    public class Contacto
     {
+        public string Nombre { get; set; }
+        public string Telefono { get; set; }
+        public string Correo { get; set; }
+        public string? Direccion {  get; set; }
     }
 }
