@@ -55,19 +55,59 @@ namespace GestorDeContactos
             }
         }
 
-        public void Editar(int id,  Contacto contacto)
+        public void Editar(int id, Contacto contacto)
         {
+            var obtenerContacto = ObtenerPorId(id);
+
+            if (obtenerContacto != null)
+            {
+                obtenerContacto.Nombre = contacto.Nombre;
+                obtenerContacto.Telefono = contacto.Telefono;
+                obtenerContacto.Correo = contacto.Correo;
+                obtenerContacto.Direccion = contacto.Direccion;
+
+                var json = JsonSerializer.Serialize(_contactos, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(_archivo, json);
+            } 
+            else
+            {
+                Console.WriteLine("No se encontro el contacto");
+            }
 
         }
 
         public void Eliminar(int id)
         {
+            var obtenerContacto = ObtenerPorId(id);
 
+            if (obtenerContacto != null)
+            {
+                _contactos.Remove(obtenerContacto);
+                var json = JsonSerializer.Serialize(_contactos, new JsonSerializerOptions {WriteIndented = true});
+                File.WriteAllText(_archivo, json);
+            }
+            else
+            {
+                Console.WriteLine("No se encontro el contacto");
+            }
         }
 
         public Contacto ObtenerPorId(int id)
         {
-            return null;
+            if (File.Exists(_archivo))
+            {
+                string json = File.ReadAllText(_archivo);
+                _contactos = JsonSerializer.Deserialize<List<Contacto>>(json);
+
+                return _contactos.Where(c => c.Id == id).FirstOrDefault();
+            } 
+            else
+            {
+                File.Create(_archivo);
+                return null;
+            }
+            
+            
         }
 
 
