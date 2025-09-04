@@ -8,6 +8,7 @@ namespace GestorDeContactos
 {
     public class Contacto
     {
+        public int Id;
         public string Nombre { get; set; }
         public string Telefono { get; set; }
         public string Correo { get; set; }
