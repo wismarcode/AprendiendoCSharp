@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,49 +11,49 @@ namespace GestorDeContactos
     public class GestorContacto
     {
         private List<Contacto> _contactos;
-        private string _archivo;
+        private string _archivo = "contactos.json";
 
-        public GestorContacto(string archivo)
-        {
-            _archivo = archivo;
-            _contactos = new List<Contacto>();
-        }
+
 
         public void Agregar(Contacto nuevoContacto)
         {
 
 
-            if (File.Exists(_archivo))
+            if (!File.Exists(_archivo))
             {
-                string json = File.ReadAllText(_archivo);
-                _contactos = JsonSerializer.Deserialize<List<Contacto>>(json);
-                _contactos.Add(nuevoContacto);
+                _contactos = new List<Contacto>();
 
-
-                var contactoJson = JsonSerializer.Serialize(_contactos, new JsonSerializerOptions {WriteIndented = true});
-                File.WriteAllText(_archivo, contactoJson);
             }
             else
             {
-                var contactoJson = JsonSerializer.Serialize(_contactos, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(_archivo, contactoJson);
+                string json = File.ReadAllText(_archivo);
+                _contactos = JsonSerializer.Deserialize<List<Contacto>>(json);
+                
             }
+
+            nuevoContacto.Id = _contactos.Count > 0 ? _contactos.Max(t => t.Id) + 1 : 1;
+            _contactos.Add(nuevoContacto);
+
+            var contactoJson = JsonSerializer.Serialize(_contactos, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_archivo, contactoJson);
+
 
         }
 
         public List<Contacto> Obtener()
         {
-            if (File.Exists(_archivo))
+            if (!File.Exists(_archivo))
             {
-                string json = File.ReadAllText(_archivo);
-                _contactos = JsonSerializer.Deserialize<List<Contacto>>(json);
-                return _contactos;
+                _contactos = new List<Contacto>();
             }
             else
             {
-                File.Create(_archivo);
-                return _contactos;
+                string json = File.ReadAllText(_archivo);
+                _contactos = JsonSerializer.Deserialize<List<Contacto>>(json);
+                
             }
+
+            return _contactos;
         }
 
         public void Editar(int id, Contacto contacto)
