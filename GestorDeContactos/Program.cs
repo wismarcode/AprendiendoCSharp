@@ -4,7 +4,7 @@
     {
         static void Main(string[] args)
         {
-            GestorContacto gestor = new GestorContacto("Contactos.json");
+            GestorContacto gestor = new GestorContacto();
 
             bool centinela = true;
 
@@ -55,11 +55,39 @@
 
         static void AgregarContacto(GestorContacto gestor)
         {
+            Console.WriteLine("Datos para crear el contacto:\n");
+
+            Console.WriteLine("Coloca el nombre del contacto:");
+            string nombre = Console.ReadLine();
+            Console.WriteLine("Colocar el número de telefono:");
+            string telefono = Console.ReadLine();
+            Console.WriteLine("Coloca el correo electrónico:");
+            string correo = Console.ReadLine();
+            Console.WriteLine("Coloca la dirección:");
+            Console.WriteLine("Esta parte es opcional, presiona enter si no lo vas a poner.");
+            string? direccion = Console.ReadLine();
+
+            var contacto = new Contacto() 
+            {
+                Nombre = nombre,
+                Telefono = telefono,
+                Correo = correo,
+                Direccion = direccion
+            };
+
+            gestor.Agregar(contacto);
+
 
         }
 
         static void ListarContactos(GestorContacto gestor)
         {
+            var listaContactos = gestor.Obtener();
+
+            foreach (var lista in listaContactos)
+            {
+                Console.WriteLine(lista);
+            }
 
         }
 
