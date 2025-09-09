@@ -93,11 +93,59 @@
 
         static void EditarContacto(GestorContacto gestor)
         {
+            Console.WriteLine("Coloca el id del contacto a editar:");
+            int id = int.Parse(Console.ReadLine());
+            var encontrarContacto = gestor.ObtenerPorId(id);
+
+            if (encontrarContacto != null)
+            {
+                Console.WriteLine("Coloca el nuevo nombre del contacto:");
+                string nombre = Console.ReadLine();
+                Console.WriteLine("Colocar el nuevo número de telefono:");
+                string telefono = Console.ReadLine();
+                Console.WriteLine("Coloca el nuevo correo electrónico:");
+                string correo = Console.ReadLine();
+                Console.WriteLine("Coloca la nueva dirección:");
+                Console.WriteLine("Esta parte es opcional, presiona enter si no lo vas a poner.");
+                string? direccion = Console.ReadLine();
+
+                var contacto = new Contacto()
+                {
+                    Nombre = nombre,
+                    Telefono = telefono,
+                    Correo = correo,
+                    Direccion = direccion
+                };
+
+                gestor.Editar(encontrarContacto, contacto);
+
+            }
+            else
+            {
+                Console.WriteLine("No se encontro");
+            }
 
         }
 
         static void EliminarContacto(GestorContacto gestor)
         {
+            Console.WriteLine("Lista de contactos:");
+            ListarContactos(gestor);
+
+            Console.WriteLine("Colocar el contacto a eliminar");
+            int id = int.Parse(Console.ReadLine());
+
+            var encontrarContacto = gestor.ObtenerPorId(id);
+
+            if (encontrarContacto != null)
+            {
+                gestor.Eliminar(encontrarContacto);
+            }
+            else
+            {
+                Console.WriteLine("No se encontro");
+            }
+
 
         }
 

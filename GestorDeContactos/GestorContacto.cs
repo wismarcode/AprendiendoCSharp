@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -56,41 +57,23 @@ namespace GestorDeContactos
             return _contactos;
         }
 
-        public void Editar(int id, Contacto contacto)
+        public void Editar(Contacto contacto, Contacto cambios)
         {
-            var obtenerContacto = ObtenerPorId(id);
+            contacto.Nombre = cambios.Nombre;
+            contacto.Telefono = cambios.Telefono;
+            contacto.Correo = cambios.Correo;
+            contacto.Direccion = cambios.Direccion;
 
-            if (obtenerContacto != null)
-            {
-                obtenerContacto.Nombre = contacto.Nombre;
-                obtenerContacto.Telefono = contacto.Telefono;
-                obtenerContacto.Correo = contacto.Correo;
-                obtenerContacto.Direccion = contacto.Direccion;
-
-                var json = JsonSerializer.Serialize(_contactos, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(_archivo, json);
-            } 
-            else
-            {
-                Console.WriteLine("No se encontro el contacto");
-            }
+            var json = JsonSerializer.Serialize(_contactos, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_archivo, json);
 
         }
 
-        public void Eliminar(int id)
+        public void Eliminar(Contacto contacto)
         {
-            var obtenerContacto = ObtenerPorId(id);
-
-            if (obtenerContacto != null)
-            {
-                _contactos.Remove(obtenerContacto);
-                var json = JsonSerializer.Serialize(_contactos, new JsonSerializerOptions {WriteIndented = true});
-                File.WriteAllText(_archivo, json);
-            }
-            else
-            {
-                Console.WriteLine("No se encontro el contacto");
-            }
+            _contactos.Remove(contacto);
+            var json = JsonSerializer.Serialize(_contactos, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_archivo, json);
         }
 
         public Contacto ObtenerPorId(int id)
