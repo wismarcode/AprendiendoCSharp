@@ -5,6 +5,7 @@
         static void Main(string[] args)
         {
             GestorContacto gestor = new GestorContacto();
+            Validaciones validacion = new Validaciones();
 
             bool centinela = true;
 
@@ -17,16 +18,16 @@
                 switch (opcion)
                 {
                     case 1:
-                        AgregarContacto(gestor);
+                        AgregarContacto(gestor, validacion);
                         break;
                     case 2:
                         ListarContactos(gestor);
                         break;
                     case 3:
-                        EditarContacto(gestor);
+                        EditarContacto(gestor, validacion);
                         break;
                     case 4:
-                        EliminarContacto(gestor);
+                        EliminarContacto(gestor, validacion);
                         break;
                     case 5:
                         Console.WriteLine("Saliste del programa.");
@@ -53,19 +54,14 @@
             Console.WriteLine("Elige una de las opciones:");
         }
 
-        static void AgregarContacto(GestorContacto gestor)
+        static void AgregarContacto(GestorContacto gestor, Validaciones validacion)
         {
             Console.WriteLine("Datos para crear el contacto:\n");
 
-            Console.WriteLine("Coloca el nombre del contacto:");
-            string nombre = Console.ReadLine();
-            Console.WriteLine("Colocar el número de telefono:");
-            string telefono = Console.ReadLine();
-            Console.WriteLine("Coloca el correo electrónico:");
-            string correo = Console.ReadLine();
-            Console.WriteLine("Coloca la dirección:");
-            Console.WriteLine("Esta parte es opcional, presiona enter si no lo vas a poner.");
-            string? direccion = Console.ReadLine();
+            string nombre = validacion.PedirTexto("Coloca el nombre del contacto:", 3, 60);
+            string telefono = validacion.PedirTexto("Coloca el número del contacto:", 10, 10);
+            string? correo = validacion.PedirCorreo("Coloca el correo electrónico:");
+            string? direccion = validacion.PedirDireccion("Coloca la dirección:", 10, 150);
 
             var contacto = new Contacto() 
             {
@@ -91,23 +87,20 @@
 
         }
 
-        static void EditarContacto(GestorContacto gestor)
+        static void EditarContacto(GestorContacto gestor, Validaciones validacion)
         {
-            Console.WriteLine("Coloca el id del contacto a editar:");
-            int id = int.Parse(Console.ReadLine());
+            Console.WriteLine("Lista de contactos:");
+            ListarContactos(gestor);
+
+            int id = validacion.PedirId("Colocar el id del contacto a eliminar:");
             var encontrarContacto = gestor.ObtenerPorId(id);
 
             if (encontrarContacto != null)
             {
-                Console.WriteLine("Coloca el nuevo nombre del contacto:");
-                string nombre = Console.ReadLine();
-                Console.WriteLine("Colocar el nuevo número de telefono:");
-                string telefono = Console.ReadLine();
-                Console.WriteLine("Coloca el nuevo correo electrónico:");
-                string correo = Console.ReadLine();
-                Console.WriteLine("Coloca la nueva dirección:");
-                Console.WriteLine("Esta parte es opcional, presiona enter si no lo vas a poner.");
-                string? direccion = Console.ReadLine();
+                string nombre = validacion.PedirTexto("Coloca el nombre del contacto:", 3, 60);
+                string telefono = validacion.PedirTexto("Coloca el número del contacto:", 10, 10);
+                string? correo = validacion.PedirCorreo("Coloca el correo electrónico:");
+                string? direccion = validacion.PedirDireccion("Coloca la dirección:", 10, 150);
 
                 var contacto = new Contacto()
                 {
@@ -127,13 +120,12 @@
 
         }
 
-        static void EliminarContacto(GestorContacto gestor)
+        static void EliminarContacto(GestorContacto gestor, Validaciones validacion)
         {
             Console.WriteLine("Lista de contactos:");
             ListarContactos(gestor);
 
-            Console.WriteLine("Colocar el contacto a eliminar");
-            int id = int.Parse(Console.ReadLine());
+            int id = validacion.PedirId("Colocar el id del contacto a eliminar:");
 
             var encontrarContacto = gestor.ObtenerPorId(id);
 
