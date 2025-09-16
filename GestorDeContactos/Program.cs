@@ -30,6 +30,12 @@
                         EliminarContacto(gestor, validacion);
                         break;
                     case 5:
+                        BuscarPorNombre(gestor, validacion);
+                        break;
+                    case 6:
+                        BuscarPorTelefono(gestor, validacion);
+                        break;
+                    case 7:
                         Console.WriteLine("Saliste del programa.");
                         centinela = false;
                         break;
@@ -48,7 +54,9 @@
             Console.WriteLine("2. Para ver la lista de contactos,");
             Console.WriteLine("3. Para editar un contacto.");
             Console.WriteLine("4. Para eliminar un contacto.");
-            Console.WriteLine("5. Para salir del programa.");
+            Console.WriteLine("5. Para buscar un contacto por su nombre.");
+            Console.WriteLine("6. Para buscar un contacto por su telefono.");
+            Console.WriteLine("7. Para salir del programa.");
             Console.WriteLine("=====================================");
             Console.WriteLine("");
             Console.WriteLine("Elige una de las opciones:");
@@ -63,7 +71,7 @@
             string? correo = validacion.PedirCorreo("Coloca el correo electrónico:");
             string? direccion = validacion.PedirDireccion("Coloca la dirección:", 10, 150);
 
-            var contacto = new Contacto() 
+            var contacto = new Contacto()
             {
                 Nombre = nombre,
                 Telefono = telefono,
@@ -164,5 +172,35 @@
 
         }
 
+        static void BuscarPorNombre(GestorContacto gestor, Validaciones validacion)
+        {
+            string nombre = validacion.PedirTexto("Coloca el nombre del contacto que buscas:", 3, 60);
+            var resultado = gestor.ObtenerPorNombre(nombre);
+
+            if (resultado != null)
+            {
+                Console.WriteLine(resultado);
+            }
+            else
+            {
+                Console.WriteLine("No se encontró el contacto.");
+            }
+
+        }
+
+        static void BuscarPorTelefono(GestorContacto gestor, Validaciones validacion)
+        {
+            string telefono = validacion.PedirTexto("Coloca el teléfono del contacto que buscas:", 10, 10);
+            var resultado = gestor.ObtenerPorTelefono(telefono);
+            if (resultado != null)
+            {
+                Console.WriteLine(resultado);
+            }
+            else
+            {
+                Console.WriteLine("No se encontró el contacto.");
+            }
+
+        }
     }
 }

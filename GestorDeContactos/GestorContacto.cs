@@ -29,7 +29,7 @@ namespace GestorDeContactos
             {
                 string json = File.ReadAllText(_archivo);
                 _contactos = JsonSerializer.Deserialize<List<Contacto>>(json);
-                
+
             }
 
             nuevoContacto.Id = _contactos.Count > 0 ? _contactos.Max(t => t.Id) + 1 : 1;
@@ -51,7 +51,7 @@ namespace GestorDeContactos
             {
                 string json = File.ReadAllText(_archivo);
                 _contactos = JsonSerializer.Deserialize<List<Contacto>>(json);
-                
+
             }
 
             return _contactos;
@@ -84,16 +84,52 @@ namespace GestorDeContactos
                 _contactos = JsonSerializer.Deserialize<List<Contacto>>(json);
 
                 return _contactos.Where(c => c.Id == id).FirstOrDefault();
-            } 
+            }
             else
             {
                 File.Create(_archivo);
                 return null;
             }
-            
-            
+
+
+        }
+
+        public Contacto ObtenerPorNombre(string nombre)
+        {
+            if (File.Exists(_archivo))
+            {
+                string json = File.ReadAllText(_archivo);
+                _contactos = JsonSerializer.Deserialize<List<Contacto>>(json);
+
+            }
+            else
+            {
+                File.Create(_archivo);
+                return null;
+            }
+
+            return _contactos.Where(c => c.Nombre.ToLower().Contains(nombre.ToLower())).FirstOrDefault();
+
+
         }
 
 
+        public Contacto ObtenerPorTelefono(string telefono)
+        {
+            if (File.Exists(_archivo))
+            {
+                string json = File.ReadAllText(_archivo);
+                _contactos = JsonSerializer.Deserialize<List<Contacto>>(json);
+            }
+            else
+            {
+                File.Create(_archivo);
+                return null;
+            }
+            return _contactos.Where(c => c.Telefono.Contains(telefono)).FirstOrDefault();
+
+
+
+        }
     }
 }
