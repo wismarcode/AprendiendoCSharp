@@ -92,15 +92,39 @@
             Console.WriteLine("Lista de contactos:");
             ListarContactos(gestor);
 
-            int id = validacion.PedirId("Colocar el id del contacto a eliminar:");
+            int id = validacion.PedirId("Colocar el id del contacto a editar:");
             var encontrarContacto = gestor.ObtenerPorId(id);
 
             if (encontrarContacto != null)
             {
-                string nombre = validacion.PedirTexto("Coloca el nombre del contacto:", 3, 60);
-                string telefono = validacion.PedirTexto("Coloca el número del contacto:", 10, 10);
-                string? correo = validacion.PedirCorreo("Coloca el correo electrónico:");
-                string? direccion = validacion.PedirDireccion("Coloca la dirección:", 10, 150);
+                Console.WriteLine("\n--- Editar Contacto ---");
+
+
+                Console.Write($"Nombre ({encontrarContacto.Nombre}): ");
+                string inputNombre = Console.ReadLine();
+                string nombre = string.IsNullOrWhiteSpace(inputNombre)
+                                ? encontrarContacto.Nombre
+                                : validacion.PedirTexto("Coloca el nombre del contacto:", 3, 60);
+
+                Console.Write($"Teléfono ({encontrarContacto.Telefono}): ");
+                string inputTelefono = Console.ReadLine();
+                string telefono = string.IsNullOrWhiteSpace(inputTelefono)
+                                ? encontrarContacto.Telefono
+                                : validacion.PedirTexto("Coloca el número del contacto:", 10, 10);
+
+
+                Console.Write($"Correo ({encontrarContacto.Correo}): ");
+                string inputCorreo = Console.ReadLine();
+                string correo = string.IsNullOrWhiteSpace(inputCorreo)
+                                ? encontrarContacto.Correo
+                                : validacion.PedirCorreo("Coloca el correo electrónico:");
+
+
+                Console.Write($"Dirección ({encontrarContacto.Direccion}): ");
+                string inputDireccion = Console.ReadLine();
+                string direccion = string.IsNullOrWhiteSpace(inputDireccion)
+                                ? encontrarContacto.Direccion
+                                : validacion.PedirDireccion("Coloca la dirección:", 10, 150);
 
                 var contacto = new Contacto()
                 {
@@ -111,11 +135,10 @@
                 };
 
                 gestor.Editar(encontrarContacto, contacto);
-
             }
             else
             {
-                Console.WriteLine("No se encontro");
+                Console.WriteLine("No se encontró el contacto.");
             }
 
         }
